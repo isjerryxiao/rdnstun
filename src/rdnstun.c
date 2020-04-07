@@ -7,9 +7,10 @@
 #include <stdint.h>
 
 
-#define IPADDR "192.168.5.2"
-#define NETMASK "255.255.255.0"
-#define LISTENRANGE 30
+#define IPADDR  "172.20.51.113"
+#define NETMASK "255.255.0.0" // whatever
+#define LISTENRANGE 5
+#define TUNNAME "rdns-dn42"
 
 static struct pico_ip4 ipaddr;
 
@@ -51,23 +52,16 @@ int cb_ping(struct pico_frame *f) {
         pico_frame_discard(f);
         return 0;
     }
-    else {
-        if (hdr->ttl < ip_dis+1) {
-            f->use_src_addr = 1;
-            *dst = ipaddr.addr - (hdr->ttl - 1) * (2<<23);
-            pico_icmp4_ttl_expired(f);
-            return 0;
-        }
-        else {
-            f->use_src_addr = 1;
-        }
+    else if (hdr->ttl < ip_dis+1) {
+        *dst = ipaddr.addr - (hdr->ttl - 1) * (2<<23);
+        pico_icmp4_ttl_expired(f);
+        return 0;
     }
     return 1;
 }
 
 
 int main(void){
-    int id;
     struct pico_ip4 netmask;
     struct pico_device* dev;
 
@@ -76,7 +70,7 @@ int main(void){
     pico_stack_init();
 
     /* create the tap device */
-    dev = pico_tun_create("tun0");
+    dev = pico_tun_create(TUNNAME);
     if (!dev)
         return -1;
 
