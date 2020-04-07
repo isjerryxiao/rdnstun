@@ -8,9 +8,9 @@
 #include <stdint.h>
 
 
-#define IPADDR  "172.20.51.113"
+#define IPADDR  "172.20.51.112"
 #define NETMASK "255.0.0.0"    // whatever
-#define LISTENRANGE 5
+#define LISTENRANGE 8
 #define TUNNAME "dn42-rdns"
 
 static struct pico_ip4 ipaddr;
