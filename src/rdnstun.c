@@ -4,13 +4,14 @@
 #include <pico_ipv4.h>
 #include <pico_icmp4.h>
 #include <pico_dev_tun.h>
+#include <pico_socket.h>
 #include <stdint.h>
 
 
 #define IPADDR  "172.20.51.113"
-#define NETMASK "255.255.0.0" // whatever
+#define NETMASK "255.0.0.0"    // whatever
 #define LISTENRANGE 5
-#define TUNNAME "rdns-dn42"
+#define TUNNAME "dn42-rdns"
 
 static struct pico_ip4 ipaddr;
 
@@ -85,6 +86,7 @@ int main(void){
     ipaddr.addr -= 2<<23;
 
     setup_icmp4_in_listener(cb_ping);
+    setup_transport_in_listener(cb_ping);
 
     while (1)
     {

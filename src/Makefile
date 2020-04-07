@@ -1,8 +1,9 @@
 all: rdnstun
 
 DEBUG ?= 0
-ifeq ($(DEBUG),0)
-      CFLAGS += -O3
+CFLAGS += -O3
+ifneq ($(DEBUG),0)
+      CFLAGS += -O0 -DDEBUG
 endif
 
 rdnstun.o: rdnstun.c build/lib/libpicotcp.a
@@ -10,7 +11,7 @@ rdnstun.o: rdnstun.c build/lib/libpicotcp.a
 rdnstun: rdnstun.o build/lib/libpicotcp.a
 
 build/lib/libpicotcp.a:
-	+$(MAKE) -C ../picotcp DEBUG=0 PERF=1 TCP=1 UDP=1 ETH=1 IPV6=0 NAT=0 MCAST=0 TUN=1
+	+$(MAKE) -C ../picotcp DEBUG=0 PERF=1 TCP=0 UDP=1 ETH=1 IPV6=0 NAT=0 MCAST=0 TUN=1
 
 clean:
 	$(MAKE) -C ../picotcp clean
