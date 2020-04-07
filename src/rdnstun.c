@@ -39,8 +39,6 @@ int cb_ping(struct pico_frame *f) {
     uint32_t * dst = &(hdr->dst.addr);
     uint32_t * src = &(hdr->src.addr);
 
-    f->use_src_addr = 1;
-
     #ifdef DEBUG
     char s_dst[30], s_src[30];
     pico_ipv4_to_string(s_dst, *dst);
@@ -54,10 +52,13 @@ int cb_ping(struct pico_frame *f) {
         return 0;
     }
     else if (hdr->ttl < ip_dis+1) {
-        *dst = ipaddr.addr - (hdr->ttl - 1) * (2<<23);
+        f->use_src_addr = ipaddr.addr - (hdr->ttl - 1) * (2<<23);
+        hdr->ttl = 1;
         pico_icmp4_ttl_expired(f);
         return 0;
     }
+    f->use_src_addr = *dst;
+    hdr->ttl = 64u;
     return 1;
 }
 
