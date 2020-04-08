@@ -9,14 +9,14 @@
 
 
 #define IPADDR  "172.20.51.112"
-#define NETMASK "255.0.0.0"    // whatever
+#define NETMASK "0.0.0.0"       // whatever
 #define LISTENRANGE 8
 #define TUNNAME "dn42-rdns"
 
 static struct pico_ip4 ipaddr;
 
 static int ip_distance(uint32_t addr) {
-    for (unsigned dis=0; dis < LISTENRANGE; dis++) {
+    for (int dis=0; dis < LISTENRANGE; dis++) {
         if ((ipaddr.addr - dis * (2<<23)) == addr) {
             return dis;
         }

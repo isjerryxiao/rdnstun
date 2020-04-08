@@ -1,0 +1,14 @@
+[Match]
+Name=dn42-rdns
+
+[Network]
+LinkLocalAddressing=no
+IgnoreCarrierLoss=true
+ConfigureWithoutCarrier=true
+[Address]
+Address=172.20.51.99/32
+Peer=172.20.51.112/32
+
+[Route]
+Destination=172.20.51.112/29
+Gateway=172.20.51.112
